@@ -259,7 +259,7 @@ data.forEach(item => {
   if (!nama) return;
 
   database[nama] = {
-    faktor: parseFloat(item["Faktor Koreksi"]) || 1,
+    faktor: parseFloat(item["Faktor Konversi"]) || 1,
     energi: parseFloat(item["ENERGI"]) || 0,
     protein: parseFloat(item["PROTEIN"]) || 0,
     lemak: parseFloat(item["LEMAK"]) || 0,
