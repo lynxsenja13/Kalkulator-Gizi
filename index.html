@@ -197,16 +197,21 @@ body.dark .judul-estimasi {
 }
 
 /* Dark mode adjustment */
-body.dark-mode .tabel-estimasi {
+body.dark .tabel-estimasi {
   background: #1e1e1e;
-  color: white;
+  color: black; /* 🔥 UBAH JADI HITAM */
 }
 
-body.dark-mode .tabel-estimasi tr:nth-child(even) {
+body.dark .tabel-estimasi td,
+body.dark .tabel-estimasi th {
+  color: black; /* 🔥 pastikan semua isi tabel hitam */
+}
+
+body.dark .tabel-estimasi tr:nth-child(even) {
   background: #2c2c2c;
 }
 
-body.dark-mode .tabel-estimasi th {
+body.dark .tabel-estimasi th {
   background: #132f66;
 }
     </style>
