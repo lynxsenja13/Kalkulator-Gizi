@@ -481,7 +481,7 @@ function tampilkanEstimasi() {
     const data = database[nama];
 
     // 🔥 hitung berdasarkan matang × porsi
-    let totalGram = matang * porsi;
+    let totalGram = matang;
 
     totalEnergi += (data.energi * totalGram) / 100;
     totalProtein += (data.protein * totalGram) / 100;
@@ -504,18 +504,22 @@ function tampilkanEstimasi() {
 function tampilkanTabelEstimasi(energi, protein, lemak, karbo, kalsium, serat) {
 
   const tbody = document.getElementById("tabelEstimasi");
+  tbody.innerHTML = "";
 
-  tbody.innerHTML = `
-    <tr>
-      <td>Total</td>
-      <td>${energi.toFixed(2)}</td>
-      <td>${protein.toFixed(2)}</td>
-      <td>${lemak.toFixed(2)}</td>
-      <td>${karbo.toFixed(2)}</td>
-      <td>${kalsium.toFixed(2)}</td>
-      <td>${serat.toFixed(2)}</td>
-    </tr>
-  `;
+  for (let key in kebutuhan) {
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${key}</td>
+        <td>${energi.toFixed(2)}</td>
+        <td>${protein.toFixed(2)}</td>
+        <td>${lemak.toFixed(2)}</td>
+        <td>${karbo.toFixed(2)}</td>
+        <td>${kalsium.toFixed(2)}</td>
+        <td>${serat.toFixed(2)}</td>
+      </tr>
+    `;
+  }
 }
  
   </script>
