@@ -240,6 +240,17 @@ input {
   font-family: 'Poppins', sans-serif;
 }
 
+.row-cukup {
+  background: #dcfce7; /* hijau muda */
+  color: black;
+  font-weight: 500;
+}
+
+body.dark .row-cukup {
+  background: #14532d;
+  color: #bbf7d0;
+}
+
 .row-kurang {
   background: #ffebee;
   color: #b71c1c;
@@ -624,14 +635,14 @@ function tampilkanTabelEstimasi(energi, protein, lemak, karbo, kalsium, serat) {
     const k = kebutuhan[key];
 
     let kurang =
-      energi <= k.energi ||
-      protein <= k.protein ||
-      lemak <= k.lemak ||
-      karbo <= k.karbo ||
-      kalsium <= k.kalsium ||
-      serat <= k.serat;
+      energi < k.energi ||
+      protein < k.protein ||
+      lemak < k.lemak ||
+      karbo < k.karbo ||
+      kalsium < k.kalsium ||
+      serat < k.serat;
 
-    let warnaRow = kurang ? "row-kurang" : "";
+    let warnaRow = kurang ? "row-kurang" : "row-cukup";
 
     tbody.innerHTML += `
       <tr class="${warnaRow}">
