@@ -1,0 +1,458 @@
+  <!DOCTYPE html>
+  <html lang="id">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Bahan Makanan</title>
+  
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+  
+    <style>
+      * { box-sizing: border-box; }
+  
+      :root {
+        --bg: #f1f5f9;
+        --card: #0f172a;
+        --text: #0f172a;
+        --accent: #3b82f6;
+      }
+  
+      body.dark {
+        --bg: #020617;
+        --card: #f8fafc;
+        --text: #ffffff;
+      }
+  
+      body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: var(--bg);
+        transition: 0.3s;
+      }
+  
+      .container {
+        max-width: 750px;
+        margin: auto;
+        padding: 20px;
+        position: relative;
+      }
+  
+      .logo {
+      width: 110px;
+      display: block;
+      margin: 0 auto 15px auto;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
+      }
+      h1 { text-align: center; color: var(--text); }
+  
+      .ahli {
+        text-align: center;
+        font-weight: 700;
+        font-family: 'Quicksand', sans-serif;
+        color: var(--text);
+      }
+  
+      .toggle {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: #64748b;
+        color: white;
+        padding: 8px 14px;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+  
+      .card {
+        background: var(--card);
+        color: var(--text);
+        border-radius: 20px;
+        padding: 25px;
+        margin-top: 20px;
+      }
+  
+      button {
+        padding: 10px;
+        border-radius: 12px;
+        border: none;
+        background: var(--accent);
+        color: white;
+        cursor: pointer;
+      }
+  
+      .btn-green { background: #22c55e !important; }
+  
+  /* HEADER */
+  .table-header {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 80px;
+    background: #3b82f6;
+    color: white;
+    border-radius: 20px;
+    padding: 12px 0;
+    margin-top: 15px;
+    font-weight: 600;
+  }
+  
+  /* ROW */
+  .bahan-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 80px;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  
+  .bahan-row input {
+    width: 100%;
+    border: none;
+    border-right: 1px solid #eee;
+    height: 48px;
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  .bahan-row input:last-of-type {
+    border-right: none;
+  }
+  
+  .bahan-row button {
+    border: none;
+    height: 48px;
+  }
+  
+  .bahan-row input:focus {
+    outline: none;
+    background: #f8fafc;
+  }
+  
+  .table-header {
+    background: #3b82f6;
+    color: white;
+    padding: 10px 0;
+    border-radius: 12px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .table-header div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+      .hapus-btn {
+        background: #ef4444 !important;
+      }
+  
+      textarea {
+        width: 100%;
+        margin-top: 15px;
+        height: 120px;
+      }
+  
+      .total {
+        margin-top: 10px;
+        color: white;
+      }
+    </style>
+  </head>
+  
+  <body>
+  
+    <div class="container">
+  
+      <datalist id="bahanList"></datalist>
+  
+      <div class="toggle" onclick="toggleMode()">🌙 Mode</div>
+  
+    <img src="logo.png" class="logo" alt="Logo SPPG">
+    <h1>SPPG Cicadas 01</h1>
+    <div class="ahli">Ahli Gizi : Aliyah Khairunnisa Syafitri</div>
+  
+    <div class="card">
+  
+      <button onclick="tambahBahan()">+ Tambah Bahan</button>
+  
+      <div class="table-header">
+      <div>Nama</div>
+      <div>Matang (gr)</div>
+      <div>Porsi</div>
+      <div>Faktor</div>
+      <div>Mentah/Porsi</div>
+      <div>Total (Kg)</div>
+      <div>Action</div>
+      </div>
+  
+      <div id="listBahan"></div>
+  
+      <div class="total" id="totalSemua">Total Semua: 0 Kg</div>
+  
+      <button class="btn-green" onclick="generateLaporan()">Generate Laporan</button>
+  
+      <textarea placeholder="Hasil laporan akan muncul di sini..."></textarea>
+
+      <h3 style="margin-top:30px;">Estimasi Perhitungan Gizi</h3>
+
+      <table border="1" style="width:100%; text-align:center; background:white;">
+      <thead>
+      <tr>
+      <th>Kelompok</th>
+      <th>ENERGI</th>
+      <th>PROTEIN</th>
+      <th>LEMAK</th>
+      <th>KARBOHIDRAT</th>
+      <th>KALSIUM</th>
+      <th>SERAT</th>
+      </tr>
+      </thead>
+      <tbody id="tabelEstimasi"></tbody>
+      </table>
+      
+    </div>
+  
+  </div>
+  
+  <script>
+  function toggleMode() {
+    document.body.classList.toggle("dark");
+  }
+    
+  // ===============================
+  // 🔥 DATABASE
+  // ===============================
+  let database = {};
+
+let totalGizi = {
+  energi: 0,
+  protein: 0,
+  lemak: 0,
+  karbo: 0,
+  serat: 0,
+  kalsium: 0
+};
+
+// 🔥 STANDAR KEBUTUHAN
+const kebutuhan = {
+  balita: { energi: 1350, protein: 20, lemak: 45, karbo: 215, kalsium: 650, serat: 19 },
+  bumil_busui: { energi: 2500, protein: 75, lemak: 65, karbo: 360, kalsium: 1200, serat: 28 },
+  sd13: { energi: 1650, protein: 35, lemak: 55, karbo: 250, kalsium: 1000, serat: 23 },
+  sd46: { energi: 2000, protein: 45, lemak: 65, karbo: 300, kalsium: 1000, serat: 28 },
+  smp: { energi: 2400, protein: 60, lemak: 80, karbo: 350, kalsium: 1200, serat: 30 },
+  sma: { energi: 2650, protein: 65, lemak: 85, karbo: 400, kalsium: 1200, serat: 32 }
+};
+  
+  async function loadDatabase() {
+    try {
+      const url = "https://opensheet.elk.sh/1xv9dDsVmfoLH8Fnkl2tjmPdnyejTsk7IC7CqwpuqzEE/Database";
+  
+      const res = await fetch(url);
+      const data = await res.json();
+  
+      const datalist = document.getElementById("bahanList");
+  
+data.forEach(item => {
+
+  let nama = item["Nama Bahan"]?.toLowerCase().trim();
+
+  if (!nama) return;
+
+  database[nama] = {
+    faktor: parseFloat(item["Faktor Koreksi"]) || 1,
+    energi: parseFloat(item["ENERGI (kal)"]) || 0,
+    protein: parseFloat(item["PROTEIN (g)"]) || 0,
+    lemak: parseFloat(item["LEMAK (g)"]) || 0,
+    karbo: parseFloat(item["KARBOHIDRAT (g)"]) || 0,
+    serat: parseFloat(item["SERAT (g)"]) || 0,
+    kalsium: parseFloat(item["KALSIUM (mg)"]) || 0
+  };
+
+  const option = document.createElement("option");
+  option.value = nama;
+  datalist.appendChild(option);
+});
+  
+    } catch (error) {
+      console.error("Gagal load database:", error);
+      alert("Database gagal dimuat. Cek koneksi / spreadsheet.");
+    }
+  }
+  
+  loadDatabase();
+  
+  // ===============================
+  // ➕ TAMBAH ROW
+  // ===============================
+  function tambahBahan() {
+    const container = document.getElementById("listBahan");
+  
+    const row = document.createElement("div");
+    row.className = "bahan-row";
+  
+    // 1️⃣ Struktur row
+    row.innerHTML = `
+      <input list="bahanList" placeholder="Nama">
+      <input type="number" placeholder="Matang">
+      <input type="number" placeholder="Porsi">
+      <input type="number" placeholder="Faktor">
+      <input type="text" placeholder="Mentah/Porsi" readonly>
+      <input type="text" placeholder="Total" readonly>
+      <button class="hapus-btn">X</button>
+    `;
+  
+    // 2️⃣ 🔥 TARUH KODE INI DI SINI
+    const inputs = row.querySelectorAll("input");
+  
+    inputs[0].oninput = () => isiFaktor(row);   // Nama
+    inputs[1].oninput = () => hitungRow(row);  // Matang
+    inputs[2].oninput = () => hitungRow(row);  // Porsi
+    inputs[3].oninput = () => hitungRow(row);  // Faktor manual
+  
+    // 3️⃣ Tombol hapus
+    row.querySelector(".hapus-btn").onclick = () => {
+      row.remove();
+      hitungTotalSemua();
+    };
+  
+    // 4️⃣ Masukkan ke container
+    container.appendChild(row);
+  }
+  
+  // ===============================
+  // 🔍 AMBIL FAKTOR
+  // ===============================
+function isiFaktor(row) {
+  const inputs = row.querySelectorAll("input");
+  let nama = inputs[0].value.toLowerCase().trim();
+
+  if (database[nama]) {
+    inputs[3].value = database[nama].faktor;
+  }
+
+  hitungRow(row);
+}
+  
+function pembulatanKhusus(angka) {
+  if (isNaN(angka)) return 0;
+
+  // Ambil 2 angka belakang koma sebagai integer
+  let duaDesimal = Math.round(angka * 100);
+
+  // Cek apakah 2 digit terakhir adalah 99
+  if (duaDesimal % 100 === 99) {
+    return Math.ceil(angka);
+  }
+
+  return parseFloat(angka.toFixed(2));
+}
+  
+  // ===============================
+  // 🧮 HITUNG
+  // ===============================
+function hitungRow(row) {
+
+  const inputs = row.querySelectorAll("input");
+
+  let nama = inputs[0].value.toLowerCase().trim();
+  let matang = parseFloat(inputs[1].value);
+  let porsi = parseFloat(inputs[2].value);
+  let faktor = parseFloat(inputs[3].value);
+
+  if (!database[nama] || isNaN(matang) || isNaN(porsi) || isNaN(faktor)) {
+    inputs[4].value = "";
+    inputs[5].value = "";
+    hitungTotalSemua();
+    return;
+  }
+
+  let mentahPerPorsi = matang * faktor;
+  let totalGram = mentahPerPorsi * porsi;
+
+  let totalKg = totalGram / 1000;
+
+  inputs[4].value = mentahPerPorsi.toFixed(2);
+  inputs[5].value = totalKg.toFixed(2);
+
+  // 🔥 HITUNG GIZI
+  const data = database[nama];
+  const faktorGizi = totalGram / 100;
+
+  totalGizi.energi += data.energi * faktorGizi;
+  totalGizi.protein += data.protein * faktorGizi;
+  totalGizi.lemak += data.lemak * faktorGizi;
+  totalGizi.karbo += data.karbo * faktorGizi;
+  totalGizi.serat += data.serat * faktorGizi;
+  totalGizi.kalsium += data.kalsium * faktorGizi;
+
+  hitungTotalSemua();
+}
+  
+  // ===============================
+  // 📊 TOTAL SEMUA
+  // ===============================
+  function hitungTotalSemua() {
+    const rows = document.querySelectorAll(".bahan-row");
+    let total = 0;
+  
+    rows.forEach(row => {
+      const inputs = row.querySelectorAll("input");
+      const val = parseFloat(inputs[5].value) || 0;
+      total += val;
+    });
+  
+    document.getElementById("totalSemua").innerText =
+      "Total Semua: " + total.toFixed(2) + " Kg";
+  }
+  
+  // ===============================
+  // 🧾 LAPORAN
+  // ===============================
+  function generateLaporan() {
+    const rows = document.querySelectorAll(".bahan-row");
+    let hasil = "";
+  
+    rows.forEach((row, i) => {
+      const inputs = row.querySelectorAll("input");
+  
+      let nama = inputs[0].value;
+      let total = inputs[5].value;
+  
+      if (nama) {
+        hasil += `${i + 1}. ${nama} - ${total} Kg\n`;
+      }
+    });
+  
+    document.querySelector("textarea").value = hasil;
+
+   // 🔥 INI DIA LETAKNYA
+  tampilkanEstimasi();
+}
+
+function tampilkanEstimasi() {
+
+  const tbody = document.getElementById("tabelEstimasi");
+  tbody.innerHTML = "";
+
+  for (let kelompok in kebutuhan) {
+
+    let standar = kebutuhan[kelompok];
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${kelompok}</td>
+        <td>${((totalGizi.energi/standar.energi)*100).toFixed(1)}%</td>
+        <td>${((totalGizi.protein/standar.protein)*100).toFixed(1)}%</td>
+        <td>${((totalGizi.lemak/standar.lemak)*100).toFixed(1)}%</td>
+        <td>${((totalGizi.karbo/standar.karbo)*100).toFixed(1)}%</td>
+        <td>${((totalGizi.kalsium/standar.kalsium)*100).toFixed(1)}%</td>
+        <td>${((totalGizi.serat/standar.serat)*100).toFixed(1)}%</td>
+      </tr>
+    `;
+  }
+}
+ 
+  </script>
+  
+  </body>
+  </html>
