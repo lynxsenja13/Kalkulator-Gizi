@@ -260,12 +260,12 @@ data.forEach(item => {
 
   database[nama] = {
     faktor: parseFloat(item["Faktor Koreksi"]) || 1,
-    energi: parseFloat(item["ENERGI (kal)"]) || 0,
-    protein: parseFloat(item["PROTEIN (g)"]) || 0,
-    lemak: parseFloat(item["LEMAK (g)"]) || 0,
-    karbo: parseFloat(item["KARBOHIDRAT (g)"]) || 0,
-    serat: parseFloat(item["SERAT (g)"]) || 0,
-    kalsium: parseFloat(item["KALSIUM (mg)"]) || 0
+    energi: parseFloat(item["ENERGI"]) || 0,
+    protein: parseFloat(item["PROTEIN"]) || 0,
+    lemak: parseFloat(item["LEMAK"]) || 0,
+    karbo: parseFloat(item["KARBOHIDRAT"]) || 0,
+    serat: parseFloat(item["SERAT"]) || 0,
+    kalsium: parseFloat(item["KALSIUM"]) || 0
   };
 
   const option = document.createElement("option");
