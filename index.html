@@ -239,6 +239,17 @@ button {
 input {
   font-family: 'Poppins', sans-serif;
 }
+
+.row-kurang {
+  background: #ffebee;
+  color: #b71c1c;
+  font-weight: 500;
+}
+
+body.dark .row-kurang {
+  background: #4a1c1c;
+  color: #ffb3b3;
+}      
     </style>
   </head>
   
@@ -318,12 +329,11 @@ let totalGizi = {
 
 // 🔥 STANDAR KEBUTUHAN
 const kebutuhan = {
-  balita: { energi: 1350, protein: 20, lemak: 45, karbo: 215, kalsium: 650, serat: 19 },
-  bumil_busui: { energi: 2500, protein: 75, lemak: 65, karbo: 360, kalsium: 1200, serat: 28 },
-  sd13: { energi: 1650, protein: 35, lemak: 55, karbo: 250, kalsium: 1000, serat: 23 },
-  sd46: { energi: 2000, protein: 45, lemak: 65, karbo: 300, kalsium: 1000, serat: 28 },
-  smp: { energi: 2400, protein: 60, lemak: 80, karbo: 350, kalsium: 1200, serat: 30 },
-  sma: { energi: 2650, protein: 65, lemak: 85, karbo: 400, kalsium: 1200, serat: 32 }
+  balita: { energi: 1375, protein: 23, lemak: 48, karbo: 218, kalsium: 825, serat: 20 },
+  sd13: { energi: 1650, protein: 40, lemak: 55, karbo: 250, kalsium: 1000, serat: 23 },
+  sd46: { energi: 1950, protein: 53, lemak: 65, karbo: 290, kalsium: 1200, serat: 27 },
+  smp: { energi: 2225, protein: 68, lemak: 75, karbo: 325, kalsium: 1200, serat: 32 },
+  sma_bumil_busui: { energi: 2375, protein: 70, lemak: 78, karbo: 350, kalsium: 1200, serat: 33 }
 };
   
   async function loadDatabase() {
@@ -591,9 +601,21 @@ function tampilkanTabelEstimasi(energi, protein, lemak, karbo, kalsium, serat) {
 
   for (let key in kebutuhan) {
 
+    const k = kebutuhan[key];
+
+    let kurang =
+      energi <= k.energi ||
+      protein <= k.protein ||
+      lemak <= k.lemak ||
+      karbo <= k.karbo ||
+      kalsium <= k.kalsium ||
+      serat <= k.serat;
+
+    let warnaRow = kurang ? "row-kurang" : "";
+
     tbody.innerHTML += `
-      <tr>
-        <td>${key}</td>
+      <tr class="${warnaRow}">
+        <td>${key.replaceAll("_", " ").toUpperCase()}</td>
         <td>${energi.toFixed(2)}</td>
         <td>${protein.toFixed(2)}</td>
         <td>${lemak.toFixed(2)}</td>
