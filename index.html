@@ -259,13 +259,13 @@ data.forEach(item => {
   if (!nama) return;
 
 database[nama] = {
-  faktor: toNumber(item["Faktor Konversi"]) || 1,
-  energi: toNumber(item["ENERGI"]),
-  protein: toNumber(item["PROTEIN"]),
-  lemak: toNumber(item["LEMAK"]),
-  karbo: toNumber(item["KARBOHIDRAT"]),
-  serat: toNumber(item["SERAT"]),
-  kalsium: toNumber(item["KALSIUM"])
+faktor: parseFloat(item["Faktor Konversi"]?.replace(",", ".")) || 1,
+energi: parseFloat(item["ENERGI"]?.replace(",", ".")) || 0,
+protein: parseFloat(item["PROTEIN"]?.replace(",", ".")) || 0,
+lemak: parseFloat(item["LEMAK"]?.replace(",", ".")) || 0,
+karbo: parseFloat(item["KARBOHIDRAT"]?.replace(",", ".")) || 0,
+serat: parseFloat(item["SERAT"]?.replace(",", ".")) || 0,
+kalsium: parseFloat(item["KALSIUM"]?.replace(",", ".")) || 0
 };
 
   const option = document.createElement("option");
