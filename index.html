@@ -498,27 +498,21 @@ function tampilkanEstimasi() {
   );
 }
 
-    function tampilkanTabelEstimasi(energi, protein, lemak, karbo, kalsium, serat) {
+function tampilkanTabelEstimasi(energi, protein, lemak, karbo, kalsium, serat) {
 
   const tbody = document.getElementById("tabelEstimasi");
-  tbody.innerHTML = "";
 
-  for (let kelompok in kebutuhan) {
-
-    let k = kebutuhan[kelompok];
-
-    tbody.innerHTML += `
-      <tr>
-        <td>${kelompok}</td>
-        <td>${((energi / k.energi) * 100).toFixed(1)}%</td>
-        <td>${((protein / k.protein) * 100).toFixed(1)}%</td>
-        <td>${((lemak / k.lemak) * 100).toFixed(1)}%</td>
-        <td>${((karbo / k.karbo) * 100).toFixed(1)}%</td>
-        <td>${((kalsium / k.kalsium) * 100).toFixed(1)}%</td>
-        <td>${((serat / k.serat) * 100).toFixed(1)}%</td>
-      </tr>
-    `;
-  }
+  tbody.innerHTML = `
+    <tr>
+      <td>Total</td>
+      <td>${energi.toFixed(2)}</td>
+      <td>${protein.toFixed(2)}</td>
+      <td>${lemak.toFixed(2)}</td>
+      <td>${karbo.toFixed(2)}</td>
+      <td>${kalsium.toFixed(2)}</td>
+      <td>${serat.toFixed(2)}</td>
+    </tr>
+  `;
 }
  
   </script>
