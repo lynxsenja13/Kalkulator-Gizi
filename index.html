@@ -451,6 +451,8 @@ function hitungRow(row) {
 
 function tampilkanEstimasi() {
 
+  const rows = document.querySelectorAll(".bahan-row");
+
   let totalEnergi = 0;
   let totalProtein = 0;
   let totalLemak = 0;
@@ -458,30 +460,61 @@ function tampilkanEstimasi() {
   let totalSerat = 0;
   let totalKalsium = 0;
 
-  bahanList.forEach(item => {
+  rows.forEach(row => {
 
-    let db = database[item.nama.toLowerCase()];
-    if (!db) return;
+    const inputs = row.querySelectorAll("input");
 
-    // 🔥 pakai matang saja
-    let totalGram = item.matang * item.porsi;
+    let nama = inputs[0].value.toLowerCase().trim();
+    let matang = parseFloat(inputs[1].value);
+    let porsi = parseFloat(inputs[2].value);
 
+    if (!database[nama] || isNaN(matang) || isNaN(porsi)) return;
+
+    // 🔥 HITUNG DARI MATANG SAJA
+    let totalGram = matang * porsi;
     let faktor = totalGram / 100;
 
-    totalEnergi += db.energi * faktor;
-    totalProtein += db.protein * faktor;
-    totalLemak += db.lemak * faktor;
-    totalKarbo += db.karbo * faktor;
-    totalSerat += db.serat * faktor;
-    totalKalsium += db.kalsium * faktor;
+    const data = database[nama];
+
+    totalEnergi += data.energi * faktor;
+    totalProtein += data.protein * faktor;
+    totalLemak += data.lemak * faktor;
+    totalKarbo += data.karbo * faktor;
+    totalSerat += data.serat * faktor;
+    totalKalsium += data.kalsium * faktor;
   });
 
-  document.getElementById("energi_total").innerText = totalEnergi.toFixed(2);
-  document.getElementById("protein_total").innerText = totalProtein.toFixed(2);
-  document.getElementById("lemak_total").innerText = totalLemak.toFixed(2);
-  document.getElementById("karbo_total").innerText = totalKarbo.toFixed(2);
-  document.getElementById("serat_total").innerText = totalSerat.toFixed(2);
-  document.getElementById("kalsium_total").innerText = totalKalsium.toFixed(2);
+  tampilkanTabelEstimasi(
+    totalEnergi,
+    totalProtein,
+    totalLemak,
+    totalKarbo,
+    totalKalsium,
+    totalSerat
+  );
+}
+
+    function tampilkanTabelEstimasi(energi, protein, lemak, karbo, kalsium, serat) {
+
+  const tbody = document.getElementById("tabelEstimasi");
+  tbody.innerHTML = "";
+
+  for (let kelompok in kebutuhan) {
+
+    let k = kebutuhan[kelompok];
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${kelompok}</td>
+        <td>${((energi / k.energi) * 100).toFixed(1)}%</td>
+        <td>${((protein / k.protein) * 100).toFixed(1)}%</td>
+        <td>${((lemak / k.lemak) * 100).toFixed(1)}%</td>
+        <td>${((karbo / k.karbo) * 100).toFixed(1)}%</td>
+        <td>${((kalsium / k.kalsium) * 100).toFixed(1)}%</td>
+        <td>${((serat / k.serat) * 100).toFixed(1)}%</td>
+      </tr>
+    `;
+  }
 }
  
   </script>
