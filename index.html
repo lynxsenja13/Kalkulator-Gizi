@@ -373,37 +373,57 @@ function hitungRow(row) {
 
   inputs[4].value = mentahPerPorsi.toFixed(2);
   inputs[5].value = totalKg.toFixed(2);
-
-  // 🔥 HITUNG GIZI
-  const data = database[nama];
-  const faktorGizi = totalGram / 100;
-
-  totalGizi.energi += data.energi * faktorGizi;
-  totalGizi.protein += data.protein * faktorGizi;
-  totalGizi.lemak += data.lemak * faktorGizi;
-  totalGizi.karbo += data.karbo * faktorGizi;
-  totalGizi.serat += data.serat * faktorGizi;
-  totalGizi.kalsium += data.kalsium * faktorGizi;
-
-  hitungTotalSemua();
 }
   
   // ===============================
   // 📊 TOTAL SEMUA
   // ===============================
-  function hitungTotalSemua() {
-    const rows = document.querySelectorAll(".bahan-row");
-    let total = 0;
-  
-    rows.forEach(row => {
-      const inputs = row.querySelectorAll("input");
-      const val = parseFloat(inputs[5].value) || 0;
-      total += val;
-    });
-  
-    document.getElementById("totalSemua").innerText =
-      "Total Semua: " + total.toFixed(2) + " Kg";
-  }
+ function hitungTotalSemua() {
+
+  const rows = document.querySelectorAll(".bahan-row");
+
+  // 🔥 RESET DULU
+  totalGizi = {
+    energi: 0,
+    protein: 0,
+    lemak: 0,
+    karbo: 0,
+    serat: 0,
+    kalsium: 0
+  };
+
+  let total = 0;
+
+  rows.forEach(row => {
+    const inputs = row.querySelectorAll("input");
+
+    let nama = inputs[0].value.toLowerCase().trim();
+    let matang = parseFloat(inputs[1].value);
+    let porsi = parseFloat(inputs[2].value);
+    let faktor = parseFloat(inputs[3].value);
+
+    let totalKg = parseFloat(inputs[5].value) || 0;
+    total += totalKg;
+
+    if (database[nama] && !isNaN(matang) && !isNaN(porsi) && !isNaN(faktor)) {
+
+      let totalGram = matang * faktor * porsi;
+      let faktorGizi = totalGram / 100;
+
+      const data = database[nama];
+
+      totalGizi.energi += data.energi * faktorGizi;
+      totalGizi.protein += data.protein * faktorGizi;
+      totalGizi.lemak += data.lemak * faktorGizi;
+      totalGizi.karbo += data.karbo * faktorGizi;
+      totalGizi.serat += data.serat * faktorGizi;
+      totalGizi.kalsium += data.kalsium * faktorGizi;
+    }
+  });
+
+  document.getElementById("totalSemua").innerText =
+    "Total Semua: " + total.toFixed(2) + " Kg";
+}
   
   // ===============================
   // 🧾 LAPORAN
