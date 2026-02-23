@@ -368,6 +368,7 @@ function hitungRow(row) {
     inputs[4].value = "";
     inputs[5].value = "";
     hitungTotalSemua();
+    tampilkanEstimasi();
     return;
   }
 
@@ -378,6 +379,8 @@ function hitungRow(row) {
 
   inputs[4].value = mentahPerPorsi.toFixed(2);
   inputs[5].value = totalKg.toFixed(2);
+
+  hitungTotalSemua();   // 🔥 TAMBAHKAN INI
 }
   
   // ===============================
