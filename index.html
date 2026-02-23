@@ -191,6 +191,7 @@ body.dark .judul-estimasi {
 
 .tabel-estimasi td {
   padding: 10px;
+  border-radius: 8px;
 }
 
 .tabel-estimasi tr:nth-child(even) {
@@ -200,12 +201,12 @@ body.dark .judul-estimasi {
 /* Dark mode adjustment */
 body.dark .tabel-estimasi {
   background: #1e1e1e;
-  color: black; /* 🔥 UBAH JADI HITAM */
+  color: white;
 }
 
 body.dark .tabel-estimasi td,
 body.dark .tabel-estimasi th {
-  color: black; /* 🔥 pastikan semua isi tabel hitam */
+  color: white;
 }
 
 body.dark .tabel-estimasi tr:nth-child(even) {
@@ -238,29 +239,7 @@ button {
 
 input {
   font-family: 'Poppins', sans-serif;
-}
-
-.row-cukup {
-  background: #dcfce7; /* hijau muda */
-  color: black;
-  font-weight: 500;
-}
-
-body.dark .row-cukup {
-  background: #14532d;
-  color: #bbf7d0;
-}
-
-.row-kurang {
-  background: #ffebee;
-  color: #b71c1c;
-  font-weight: 500;
-}
-
-body.dark .row-kurang {
-  background: #4a1c1c;
-  color: #ffb3b3;
-}      
+}     
     </style>
   </head>
   
@@ -302,19 +281,19 @@ body.dark .row-kurang {
 
       <div class="wrapper-estimasi">
   <table class="tabel-estimasi">
-    <thead>
-      <tr>
-        <th>Kelompok</th>
-        <th>Energi</th>
-        <th>Protein</th>
-        <th>Lemak</th>
-        <th>Karbo</th>
-        <th>Kalsium</th>
-        <th>Serat</th>
-      </tr>
-    </thead>
-    <tbody id="tabelEstimasi"></tbody>
-  </table>
+  <thead>
+    <tr>
+      <th>Kelompok</th>
+      <th>Energi</th>
+      <th>Protein</th>
+      <th>Lemak</th>
+      <th>Karbo</th>
+      <th>Kalsium</th>
+      <th>Serat</th>
+    </tr>
+  </thead>
+  <tbody id="tabelEstimasi"></tbody>
+</table>
 </div>
   
   </div>
@@ -625,6 +604,19 @@ function tampilkanEstimasi() {
   );
 }
 
+function getStyle(nilai, standar) {
+
+  let persen = (nilai / standar) * 100;
+
+  if (persen >= 100) {
+    return 'style="background:#bbf7d0; color:black; font-weight:600;"'; // hijau
+  } else if (persen >= 80) {
+    return 'style="background:#fef9c3; color:black;"'; // kuning
+  } else {
+    return 'style="background:#fecaca; color:black;"'; // merah
+  }
+}
+
 function tampilkanTabelEstimasi(energi, protein, lemak, karbo, kalsium, serat) {
 
   const tbody = document.getElementById("tabelEstimasi");
@@ -634,25 +626,16 @@ function tampilkanTabelEstimasi(energi, protein, lemak, karbo, kalsium, serat) {
 
     const k = kebutuhan[key];
 
-    let kurang =
-      energi < k.energi ||
-      protein < k.protein ||
-      lemak < k.lemak ||
-      karbo < k.karbo ||
-      kalsium < k.kalsium ||
-      serat < k.serat;
-
-    let warnaRow = kurang ? "row-kurang" : "row-cukup";
-
     tbody.innerHTML += `
-      <tr class="${warnaRow}">
+      <tr>
         <td>${key.replaceAll("_", " ").toUpperCase()}</td>
-        <td>${energi.toFixed(2)}</td>
-        <td>${protein.toFixed(2)}</td>
-        <td>${lemak.toFixed(2)}</td>
-        <td>${karbo.toFixed(2)}</td>
-        <td>${kalsium.toFixed(2)}</td>
-        <td>${serat.toFixed(2)}</td>
+
+        <td ${getStyle(energi, k.energi)}>${energi.toFixed(2)}</td>
+        <td ${getStyle(protein, k.protein)}>${protein.toFixed(2)}</td>
+        <td ${getStyle(lemak, k.lemak)}>${lemak.toFixed(2)}</td>
+        <td ${getStyle(karbo, k.karbo)}>${karbo.toFixed(2)}</td>
+        <td ${getStyle(kalsium, k.kalsium)}>${kalsium.toFixed(2)}</td>
+        <td ${getStyle(serat, k.serat)}>${serat.toFixed(2)}</td>
       </tr>
     `;
   }
