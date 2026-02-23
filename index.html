@@ -156,6 +156,59 @@
         margin-top: 10px;
         color: white;
       }
+
+.judul-estimasi {
+  margin-top: 30px;
+  transition: 0.3s ease;
+  color: white; /* default light mode */
+}
+
+body.dark .judul-estimasi {
+  color: #0b3d91; /* biru tua saat dark mode */
+}
+
+.wrapper-estimasi {
+  margin-top: 15px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+.tabel-estimasi {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  text-align: center;
+}
+
+.tabel-estimasi th {
+  background: #0b3d91;
+  color: white;
+  padding: 12px;
+  font-weight: 600;
+}
+
+.tabel-estimasi td {
+  padding: 10px;
+}
+
+.tabel-estimasi tr:nth-child(even) {
+  background-color: #f4f6fa;
+}
+
+/* Dark mode adjustment */
+body.dark-mode .tabel-estimasi {
+  background: #1e1e1e;
+  color: white;
+}
+
+body.dark-mode .tabel-estimasi tr:nth-child(even) {
+  background: #2c2c2c;
+}
+
+body.dark-mode .tabel-estimasi th {
+  background: #132f66;
+}
     </style>
   </head>
   
@@ -193,24 +246,24 @@
   
       <textarea placeholder="Hasil laporan akan muncul di sini..."></textarea>
 
-      <h3 style="margin-top:30px;">Estimasi Perhitungan Gizi</h3>
+      <h3 class="judul-estimasi">Estimasi Perhitungan Gizi</h3>
 
-      <table border="1" style="width:100%; text-align:center; background:white;">
-      <thead>
+      <div class="wrapper-estimasi">
+  <table class="tabel-estimasi">
+    <thead>
       <tr>
-      <th>Kelompok</th>
-      <th>ENERGI</th>
-      <th>PROTEIN</th>
-      <th>LEMAK</th>
-      <th>KARBOHIDRAT</th>
-      <th>KALSIUM</th>
-      <th>SERAT</th>
+        <th>Kelompok</th>
+        <th>Energi</th>
+        <th>Protein</th>
+        <th>Lemak</th>
+        <th>Karbo</th>
+        <th>Kalsium</th>
+        <th>Serat</th>
       </tr>
-      </thead>
-      <tbody id="tabelEstimasi"></tbody>
-      </table>
-      
-    </div>
+    </thead>
+    <tbody id="tabelEstimasi"></tbody>
+  </table>
+</div>
   
   </div>
   
