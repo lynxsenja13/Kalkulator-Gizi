@@ -258,15 +258,15 @@ data.forEach(item => {
 
   if (!nama) return;
 
-  database[nama] = {
-    faktor: parseFloat(item["Faktor Konversi"]) || 1,
-    energi: parseFloat(item["ENERGI"]) || 0,
-    protein: parseFloat(item["PROTEIN"]) || 0,
-    lemak: parseFloat(item["LEMAK"]) || 0,
-    karbo: parseFloat(item["KARBOHIDRAT"]) || 0,
-    serat: parseFloat(item["SERAT"]) || 0,
-    kalsium: parseFloat(item["KALSIUM"]) || 0
-  };
+database[nama] = {
+  faktor: toNumber(item["Faktor Konversi"]) || 1,
+  energi: toNumber(item["ENERGI"]),
+  protein: toNumber(item["PROTEIN"]),
+  lemak: toNumber(item["LEMAK"]),
+  karbo: toNumber(item["KARBOHIDRAT"]),
+  serat: toNumber(item["SERAT"]),
+  kalsium: toNumber(item["KALSIUM"])
+};
 
   const option = document.createElement("option");
   option.value = nama;
@@ -318,6 +318,11 @@ data.forEach(item => {
     // 4️⃣ Masukkan ke container
     container.appendChild(row);
   }
+
+    function toNumber(value) {
+  if (!value) return 0;
+  return parseFloat(value.toString().replace(",", "."));
+}
   
   // ===============================
   // 🔍 AMBIL FAKTOR
@@ -470,18 +475,17 @@ function tampilkanEstimasi() {
 
     if (!database[nama] || isNaN(matang) || isNaN(porsi)) return;
 
-    // 🔥 HITUNG DARI MATANG SAJA
-    let totalGram = matang * porsi;
-    let faktor = totalGram / 100;
-
     const data = database[nama];
 
-    totalEnergi += data.energi * faktor;
-    totalProtein += data.protein * faktor;
-    totalLemak += data.lemak * faktor;
-    totalKarbo += data.karbo * faktor;
-    totalSerat += data.serat * faktor;
-    totalKalsium += data.kalsium * faktor;
+    // 🔥 hitung berdasarkan matang × porsi
+    let totalGram = matang * porsi;
+
+    totalEnergi += (data.energi * totalGram) / 100;
+    totalProtein += (data.protein * totalGram) / 100;
+    totalLemak += (data.lemak * totalGram) / 100;
+    totalKarbo += (data.karbo * totalGram) / 100;
+    totalSerat += (data.serat * totalGram) / 100;
+    totalKalsium += (data.kalsium * totalGram) / 100;
   });
 
   tampilkanTabelEstimasi(
