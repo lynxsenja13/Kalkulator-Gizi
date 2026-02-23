@@ -327,6 +327,15 @@ let totalGizi = {
   kalsium: 0
 };
 
+const tambahanMinyak = {
+  energi: 44,
+  protein: 0,
+  lemak: 5,
+  karbo: 0,
+  kalsium: 0,
+  serat: 0
+};
+
 // 🔥 STANDAR KEBUTUHAN
 const kebutuhan = {
   balita: { energi: 1375, protein: 23, lemak: 48, karbo: 218, kalsium: 825, serat: 20 },
@@ -582,6 +591,17 @@ function tampilkanEstimasi() {
     totalKarbo += (data.karbo * totalGram) / 100;
     totalSerat += (data.serat * totalGram) / 100;
     totalKalsium += (data.kalsium * totalGram) / 100;
+
+    // 🔥 Tambahan jika ada kata "goreng"
+    if (nama.includes("goreng")) {
+
+      totalEnergi += tambahanMinyak.energi * porsi;
+      totalProtein += tambahanMinyak.protein * porsi;
+      totalLemak += tambahanMinyak.lemak * porsi;
+      totalKarbo += tambahanMinyak.karbo * porsi;
+      totalSerat += tambahanMinyak.serat * porsi;
+      totalKalsium += tambahanMinyak.kalsium * porsi;
+    }
   });
 
   tampilkanTabelEstimasi(
